@@ -1,0 +1,10 @@
+QA,Picture,Text
+0,picktwo,"Is this a custom question? \underscores \#1"
+0,None,"Is this a custom question? \underscores \underscores \underscores \#2"
+0,None,"Is this a custom question? \underscores \underscores \#3"
+0,drawtwopickthree,"Is this a custom question? \underscores \#4"
+0,None,"Is this a custom question? \underscores \#5"
+0,None,"Is this a custom question? \underscores \#6"
+0,None,"Is this a custom question? \underscores \#7"
+0,None,"Is this a custom question? \underscores \#8"
+0,None,"Is this a custom question? \underscores \#9"

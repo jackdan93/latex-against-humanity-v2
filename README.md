@@ -1,5 +1,107 @@
-# LaTeX Against Humanity
+# LaTeX Against Humanity v2
 
+*LaTeX Against Humanity v2* is a fork of the [**original repository**](https://github.com/ramabile/latex-against-humanity) designed to enhance the script's functionality for real-world printing.
+This project was born out of necessity: after modifying the original code extensively to suit my needs, the changes became too significant for a single pull request and they required a dedicated fork.
+
+I hope this project can be helpful to others too!<br>
+If you find it useful, please consider leaving a star! ⭐
+
+### Key Improvements
+
+* **Standardized Layout:**
+    * Page size updated to **A4** with standard margins.
+    * White margin added between cards (thanks to user [**airon90**](https://github.com/airon90) for the inspiration from his pull request).
+    * The new page generated after printing the first dataset (questions) always have its first card printed from the top left border.
+* **Industry-Standard Dimensions:** Card sizes adjusted to **63.5 x 88.9 mm** (2.5 x 3.5 inches) to fit common sleeves.
+* **Streamlined Workflow:**
+    * Cleaned up and organized project files.
+    * Optimized images
+    * Added support for switching between different CSV sets (default or custom) via command line parameters.
+* **Expanded Content:**
+    * Included official card sets in both **English and Italian**.
+    * Translated all images into Italian.
+    * Added a base image template to simplify future additions.
+
+## How to run it
+
+This project allows you to generate custom card sets by passing parameters directly from your terminal (WSL, Linux, or macOS). 
+
+### Prerequisites
+Ensure you have a LaTeX distribution installed (e.g., **TeX Live** or **MiKTeX**). On WSL/Ubuntu, you can install it via:
+```bash
+sudo apt update && \
+sudo apt install texlive-latex && \
+sudo apt install texlive-latex-extra
+```
+
+### Basic Usage (Default: English)
+By default, running the standard command will generate the English version of the cards using the default filenames:
+
+```bash
+pdflatex against-humanity.tex
+```
+
+### Custom Datasets
+You can specify which CSV files to use (e.g., Italian default or custom questions/answers) by defining the *\questionsDataset* and *\answersDataset* variables directly in the command line.
+
+#### Example: Compiling the Italian default Version (already packed in)
+```bash
+pdflatex "\def\questionsDataset{default_questions_it.csv} \def\answersDataset{default_answers_it.csv} \input{against-humanity.tex}"
+```
+
+#### Example: Compiling a Custom Set (already packed in, to be edited)
+```bash
+pdflatex "\def\questionsDataset{custom_questions.csv} \def\answersDataset{custom_answers.csv} \input{against-humanity.tex}"
+```
+
+If you want to use your own set of questions/answers you can edit the *custom_questions.csv* and *custom_questions.csv* files as you like (please always follow the correct format or the script won't work anymore!).
+
+### Custom images
+
+You can also choose to add your own image in the lower right corner of any card:
+* Create your own image (use the *img/Base* file as a starting model, so you can keep the same dimensions and proportion)
+* Save it as a PDF file (**it must have compatibility set to Acrobat 7 (PDF 1.6)!**)
+* Place it under the *img* folder
+* Open the main script file (*tex/against-humanity.tex*)
+* Find the '**%%% PICTURES %%%**' section
+* Copy the last command and change its name and image with your own one
+
+    **Example**: the image **workmate.pdf** has been placed inside the *img* folder. The main script file will look like this:
+    ```bash
+    %%% PICTURES %%%
+    \newcommand{\logo}{\includegraphics{logo}}
+    \newcommand{\draw}{\includegraphics{draw}}
+    \newcommand{\pick}{\includegraphics{pick}}
+    \newcommand{\pescaduesceglitre}{\includegraphics{pescaduesceglitre}}
+    \newcommand{\sceglidue}{\includegraphics{sceglidue}}
+    \newcommand{\workmate}{\includegraphics{workmate}}
+    ``` 
+* Now you can use it inside the *custom_questions.csv* file:
+
+    ```bash
+    QA,Picture,Text
+    0,None,"Is this a custom question? \underscores \#1"
+    0,workmate,"Is this a custom question? \underscores \#2"
+    0,None,"Is this a custom question? \underscores \#3"
+    ``` 
+    (**NOTE: only questions cards can have an image!**)
+
+## Reccomendations
+
+* Custom datasets: when using custom datasets, always be careful with symbols because they can break the script.
+
+    **Example**: the character '#' must be escaped to be correctly recognized, so, inside the CSV, it will be written like this:
+
+    ```bash
+    QA,Picture,Text
+    0,None,"Is this a custom question? \underscores \#1"
+    ```
+
+--- 
+
+### Original README
+
+<br>
 <p align="center"><img src="example/example_180312.png?raw=true" alt="latex cards against humanity table example"></p>
 <p align="center"><i>Give as a pretext<br>
 your misanthropic friends<br>

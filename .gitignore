@@ -1,0 +1,4 @@
+# LaTex files
+/tex/*.aux
+/tex/*.log
+/tex/*.pdf

@@ -1,10 +1,12 @@
 %%% PREAMBLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass{article}
-\usepackage[paperheight=30cm,paperwidth=45cm,margin=0pt]{geometry} %page layout
+% Configurazione A4 e margini a zero per massimizzare lo spazio 
+\usepackage[a4paper,margin=0pt]{geometry} 
 \usepackage[freepin,boxed]{ticket} %card interface
 \usepackage{graphicx} %handle pictures
 \graphicspath{{img/}} %prepend folder for pictures
 \usepackage{datatool} %loop utilities
+\DTLsetseparator{,} % Ensure comma is the separator
 \usepackage[utf8]{inputenc} %richer encoding
 \usepackage{ifthen} %if-then clauses
 \usepackage{xcolor} %color commands
@@ -22,7 +24,7 @@
 %   TeX is smart enough not to print colored-as-background characters.
 \newcommand\underscores{%
     \underline{\color{\blackname}% underline following text
-        \_\_\_\_\_\_\_\_\leavevmode\xleaders\hbox{\_}\hfill\kern0pt\ % grazie ilario
+        \_\_\_\_\_\_\_\_\leavevmode\xleaders\hbox{\_}\hfill\kern0pt\
     }%
 \ } %the space here ensures next character is not underlined
 
@@ -31,12 +33,12 @@
     \ifthenelse{#1 = 0}{\Question{#2}{#3}}{\Answer{#2}}%
 }
 \newcommand{\carddefault}{%
-        \put(12, 3){\tiny Cards Against Humanity}%
-        \put( 4, 1){\logo}%
+        \put(12, 4.5){\tiny Cards Against Humanity}%
+        \put( 2, 3){\logo}%
 }
 
 \newcommand{\cardtext}[1]{%
-        \put(4,38){\parbox[t]{0.10\textwidth}{\sffamily \bfseries \flushleft #1}}
+        \put(5,80){\parbox[t]{53mm}{\large \sffamily \bfseries \flushleft #1}}
 }
 
 %%% CARD SPECIFIC TYPE %%%
@@ -45,7 +47,7 @@
 \newcommand{\Questiondefault}{%
     \renewcommand{\ticketdefault}{\color{white}%
         \put(0,0){\begin{tikzpicture}
-            \fill [\blackname] (0mm,0mm) rectangle (5cm,5cm);
+            \fill [\blackname] (0mm,0mm) rectangle (\ticketWidth, \ticketHeight);
         \end{tikzpicture}}
         \carddefault
     }
@@ -54,7 +56,7 @@
 \newcommand{\Question}[2]{\Questiondefault
     \ticket{
         \cardtext{#1}
-        \put(26,5){\includegraphics{#2}}
+        \put(41,5){\color{black}\mbox{\includegraphics{#2}}}
     }
 }
 
@@ -76,14 +78,16 @@
 \newcommand{\logo}{\includegraphics{logo}}
 \newcommand{\draw}{\includegraphics{draw}}
 \newcommand{\pick}{\includegraphics{pick}}
+\newcommand{\pescaduesceglitre}{\includegraphics{pescaduesceglitre}}
+\newcommand{\sceglidue}{\includegraphics{sceglidue}}
 
 %%% TICKET SETUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ticketNumbers{9}{6}
+\ticketNumbers{3}{3}
 \unitlength=1mm
-\ticketSize{50}{50}
-\ticketDistance{0}{0} 
-\hoffset=-1cm
-\voffset=-1.35cm
+\ticketSize{63}{88}
+\ticketDistance{1}{1} 
+\hoffset=0cm
+\voffset=0cm
 
 %%% END PREAMBLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -93,17 +97,33 @@
 
 \newgeometry{margin=1cm,footskip=0pt}
 
-%\DTLsetseparator{;} %uncomment it to use semicolon as separator
-\DTLloaddb{Questions}{questions.csv}
+% \DTLsetseparator{;} %uncomment it to use semicolon as separator
+
+% Check if \questionsDataset and \answersDataset have been passed from the terminal and 
+% use them to select the related CSV files accordingly
+\ifdefined\questionsDataset
+  % Ignore if already set
+\else
+  \def\questionsDataset{default_questions_en.csv} % Set a fallback value
+\fi
+
+\ifdefined\answersDataset
+  % Ignore if already set
+\else
+  \def\answersDataset{default_answers_en.csv} % Set a fallback value
+\fi
+
+\DTLloaddb{Questions}{csv/\questionsDataset}
 \DTLforeach{Questions}{\Flag=QA,\Pic=Picture,\Text=Text}{%
-    \card{\Flag}{\Text}{\Pic}%
+  \card{\Flag}{\Text}{\Pic}%
 }
 
-\pagebreak %ensures break to separate Questions from Answers (design choice)
+\clearpage % Ensures break to separate Questions from Answers (design choice)
+\ticketreset % Resets the grid position to the top-left
 
-\DTLloaddb{Answers}{answers.csv}
+\DTLloaddb{Answers}{csv/\answersDataset}
 \DTLforeach{Answers}{\Flag=QA,\Pic=Picture,\Text=Text}{%
-    \card{\Flag}{\Text}{\Pic}%
+  \card{\Flag}{\Text}{\Pic}%
 }
 
 \end{document}
